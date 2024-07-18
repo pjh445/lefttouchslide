@@ -39,8 +39,9 @@
                     s1.style.left = 0;
                     s1.style.transition = 'none';
                     s1.append(s1.firstElementChild);
+                    
                     sliding = false; //슬라이드 이동 종료
-                }
+                }               
             }
 
             //setInterval(  toLeft  , 2000 );
@@ -50,13 +51,13 @@
                 if(!sliding) {
                     x1 = e.touches[0].clientX;   
            
-                    area.addEventListener("touchend" , e=>{
+                    area.addEventListener("touchend" ,  zz= e=>{
                         x2 = e.changedTouches[0].clientX;                  
 
                         if( x1 > x2 ) {
                             toLeft();
                         }
-
+                        area.removeEventListener("touchend", zz); //이벤트리스너제거
                     });
                 }
             });
