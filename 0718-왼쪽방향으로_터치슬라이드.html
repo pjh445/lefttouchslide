@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>왼쪽방향으로 터치하여 슬라이드</title>
+    <style>
+        * {margin:0; padding:0; box-sizing: border-box;}
+        #layout {max-width:700px; height:700px; margin:auto; border:0px solid red; overflow: hidden;}
+        #slide {width:300%; display: flex; position:relative; left:0;}
+        #slide img {width:100%;}
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded" , () => {
+
+            const area = document.getElementById("slideArea");//터치하는 곳            
+            const s1 = document.getElementById('slide');  
+
+            const iw = window.innerWidth; //브라우저 넓이
+            const img = Array.from( document.getElementsByTagName('img'));
+
+            let x1;
+            let x2;
+            let pos;
+            let sliding = false; //슬라이드 이동을 추적하는 변수 (현재는 슬라이드를 껐다)
+            
+            img.forEach( i => {
+                i.style.width= iw + 'px';
+            });
+
+            const toLeft = () => {
+                sliding = true; //슬라이드를 켠다.
+                s1.style.transition = 'left 1.5s';
+                s1.style.left = '-100%';               
+
+                setTimeout( ()=>  x()  ,  1500 );
+
+                const x = () => {
+                    s1.style.left = 0;
+                    s1.style.transition = 'none';
+                    s1.append(s1.firstElementChild);
+                    sliding = false; //슬라이드 이동 종료
+                }
+            }
+
+            //setInterval(  toLeft  , 2000 );
+
+            area.addEventListener("touchstart" , e=>{
+                //슬라이드가 껴져있다면 아래 구문이 실행됨. (터치를 계산함.)
+                if(!sliding) {
+                    x1 = e.touches[0].clientX;   
+           
+                    area.addEventListener("touchend" , e=>{
+                        x2 = e.changedTouches[0].clientX;                  
+
+                        if( x1 > x2 ) {
+                            toLeft();
+                        }
+
+                    });
+                }
+            });
+
+
+        });//////////////// 전체 끝
+    </script>
+</head>
+<body>
+    <div id="layout">
+        <section id="slideArea">
+            <h1>슬라이드</h1>
+            <div id="slide">
+                <img src="images/s1.jpg" alt="슬라이드이미지">
+                <img src="images/s2.jpg" alt="슬라이드이미지">
+                <img src="images/s3.jpg" alt="슬라이드이미지">
+            </div>
+        </section>
+    </div>
+</body>
+</html>
